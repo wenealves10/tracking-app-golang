@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Packages In RealTime</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/vue@3"></script>
+
+    <div id="app">
+        <hr>
+        <div class="width: 100%; text-align:center;" v-for="loc in locations" :key="loc.to">
+            <pre>{{loc}}</pre>
+            <hr>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue
+
+        createApp({
+            data() {
+                return {
+                    locations: []
+                }
+            },
+            methods: {
+                formatDate(d) {
+                    hours = this.formatTwoDigits(d.getHours());
+                    minutes = this.formatTwoDigits(d.getMinutes());
+                    seconds = this.formatTwoDigits(d.getSeconds());
+                    return hours + ":" + minutes + ":" + seconds;
+                },
+                formatTwoDigits(n) {
+                    return n < 10 ? '0' + n : n;
+                }
+            },
+            mounted() {
+                let vehicleId = "123"
+                let ws = new WebSocket(`ws://backinsano.webnetwork.com.br:3000/packages/track/${vehicleId}`)
+                ws.onopen = () => {
+                    console.log('Connected')
+                }
+                ws.onmessage = (evt) => {
+                    let loc = JSON.parse(evt.data)
+                    loc.date = this.formatDate(new Date())
+                    this.locations.push(loc)
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
