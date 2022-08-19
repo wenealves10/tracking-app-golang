@@ -38,6 +38,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer dataJson.Close()
 
 	body, err := io.ReadAll(dataJson)
 
@@ -55,7 +56,7 @@ func main() {
 
 	go func() {
 		for _, pkg := range packages {
-			time.Sleep(2 * time.Second)
+			time.Sleep(10 * time.Microsecond)
 			pc.Publish(domain.Package{From: pkg.From, To: pkg.To, VehicleID: "123"})
 		}
 	}()
