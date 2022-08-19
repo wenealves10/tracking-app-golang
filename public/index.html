@@ -41,7 +41,7 @@
             },
             mounted() {
                 let vehicleId = "123"
-                let ws = new WebSocket(`ws://backinsano.webnetwork.com.br:3000/packages/track/${vehicleId}`)
+                let ws = new WebSocket(`ws://backinsano.webnetwork.com.br:3000/package/track/${vehicleId}`)
                 ws.onopen = () => {
                     console.log('Connected')
                 }
