@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"io"
 	"os"
 	"time"
 
@@ -34,13 +33,10 @@ func main() {
 
 	defer pc.Close()
 
-	dataJson, err := os.Open("./data/generated.json")
+	dataJson, err := os.ReadFile("./data/generated.json")
 	if err != nil {
 		panic(err)
 	}
-	defer dataJson.Close()
-
-	body, err := io.ReadAll(dataJson)
 
 	if err != nil {
 		panic(err)
@@ -48,7 +44,7 @@ func main() {
 
 	var packages []domain.Package
 
-	err = json.Unmarshal(body, &packages)
+	err = json.Unmarshal(dataJson, &packages)
 
 	if err != nil {
 		panic(err)
