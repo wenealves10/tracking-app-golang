@@ -30,6 +30,11 @@ func NewRabbitClient(connString string) (*rabbitmqCliet, error) {
 		return nil, err
 	}
 
+	c.ch, err = c.conn.Channel()
+	if err != nil {
+		return nil, err
+	}
+
 	err = c.configureQueue()
 
 	if err != nil {
